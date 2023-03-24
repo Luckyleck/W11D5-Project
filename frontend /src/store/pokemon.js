@@ -15,9 +15,15 @@ const loadTypes = types => ({
 });
 
 const addOnePokemon = pokemon => ({
-  type: ADD_ONE,
+  type: ADD_ONE, 
   pokemon
 });
+
+// const postPokemon = pokemon => ({
+//   type: ADD_ITEM,
+//   pokemon
+// })
+
 
 export const getPokemon = () => async dispatch => {
   const response = await fetch(`/api/pokemon`);
@@ -38,6 +44,7 @@ export const getPokemonTypes = () => async dispatch => {
 };
 
 export const getOnePokemon = (pokemonId) => async dispatch => {
+
   const response = await fetch(`/api/pokemon/${pokemonId}`)
 
   if (response.ok) {
@@ -46,6 +53,21 @@ export const getOnePokemon = (pokemonId) => async dispatch => {
   }
 }
 
+export const postPokemonForm = (pokemon) => async dispatch => {
+  // debugger
+  // pokemon.id = 152
+  const response = await fetch(`/api/pokemon/`, {
+    method: "POST",
+    body: JSON.stringify(pokemon),
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept' : 'application/json'
+    }
+  })
+
+  const newPokemon = await response.json();
+  dispatch(addOnePokemon(newPokemon));
+}
 
 const initialState = {
   list: [],
@@ -112,6 +134,7 @@ const pokemonReducer = (state = initialState, action) => {
         }
       };
     case ADD_ITEM:
+      console.log('hi')
       console.log(action.item);
       return {
         ...state,
